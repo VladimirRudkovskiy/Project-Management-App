@@ -1,7 +1,10 @@
 'use client'
 
-import { LockIcon } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { Home, LockIcon, LucideIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 
@@ -30,14 +33,66 @@ const SideBar = () => {
 							NORTH TEAM
 						</h3>
 						<div className="mt-1 flex items-start gap-2">
-							<LockIcon className="mt-[0.1rem] h-3 w-3 text-gray-500 dark:text-gray-400"/>
+							<LockIcon className="mt-[0.1rem] h-3 w-3 text-gray-500 dark:text-gray-400" />
 							<p className="text-xs text-gray-500">Private</p>
 						</div>
 					</div>
 				</div>
 				{/* navbar links */}
+				<nav className="z-10 w-full">
+					<SideBarLink 
+					icon={Home}
+					label="Home"
+					href="/"
+					/>
+				</nav>
 			</div>
 		</div>
+	);
+};
+
+interface SideBarLinkProps {
+	href: string;
+	icon: LucideIcon;
+	label: string;
+	// isCollapsed: boolean;
+}
+
+const SideBarLink = ({
+	href,
+	icon: Icon,
+	label,
+	// isCollapsed
+}: SideBarLinkProps) => {
+	const pathname = usePathname();
+	const isActive = pathname === href || (pathname === "/" && href === "/dashboard");
+	const screenWidth = window.innerWidth;
+
+
+	const dispatch = useAppDispatch();
+	const isSideBarCollapsed = useAppSelector(
+		(state) => state.global.isSidebarCollapsed
+	);
+	const isDarkMode = useAppSelector(
+		(state) => state.global.isDarkMode
+	);
+
+	return (
+		<Link href={href} className="w-full">
+			<div className={`relative flex cursor-pointer items-center gap-3 transition-colors hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-700 
+					${isActive ? 'bg-gray-100 text-white dark:bg-gray-600' : ""
+				}`}
+			>
+				{isActive && (
+					<div className="absolute left-0 top-0 h-[100%] w-[5px] bg-blue-200" />
+				)}
+
+				<Icon className="h-6 w-6 text-gray-800 dark:text-gray-100" />
+				<span className={`font-medium text-gray-800 dark:text-gray-100`}>
+					{label}
+				</span>
+			</div>
+		</Link>
 	)
 }
 
