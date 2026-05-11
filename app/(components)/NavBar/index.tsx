@@ -20,7 +20,7 @@ const NavBar = () => {
 
 				{!isSideBarCollapsed ? null : (
 					<button onClick={() => dispatch(setIsSidebarCollapsed(!isSideBarCollapsed))}>
-						<Menu className='h-8 w-8 dark:text-white' />
+						<Menu className='h-8 w-8 dark:text-white cursor-pointer' />
 					</button>
 				)}
 				<div className="relative flex h-min w-[200px]">

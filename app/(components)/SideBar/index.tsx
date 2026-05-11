@@ -1,7 +1,8 @@
 'use client'
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
-import { Home, LockIcon, LucideIcon } from "lucide-react";
+import { setIsSidebarCollapsed } from "@/state";
+import { AlertCircle, AlertOctagon, AlertTriangle, Briefcase, ChevronDown, ChevronUp, Home, Layers3, LockIcon, LucideIcon, Search, Settings, ShieldAlert, User, Users, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -12,8 +13,16 @@ const SideBar = () => {
 	const [showProjects, setShowProjects] = useState(true);
 	const [showPriority, setShowPriority] = useState(true);
 
+	const dispatch = useAppDispatch();
+	const isSideBarCollapsed = useAppSelector(
+		(state) => state.global.isSidebarCollapsed
+	);
+	const isDarkMode = useAppSelector(
+		(state) => state.global.isDarkMode
+	);
+
 	const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
-	transition-all duration-300 h-full h-full z-40 dark:bg-black overflow-y-auto bg-white w-64
+	transition-all duration-300 h-full h-full z-40 dark:bg-black overflow-y-auto bg-white ${isSideBarCollapsed ? "w-0 hidden" : 'w-64'}
 	`
 
 	return (
@@ -24,6 +33,11 @@ const SideBar = () => {
 					<div className="text-xl font-bold text-gray-800 dark:text-white">
 						NorthList
 					</div>
+					{isSideBarCollapsed ? null : (
+						<button className="py-3" onClick={() => { dispatch(setIsSidebarCollapsed(!isSideBarCollapsed)) }}>
+							<X className="h-6 w-6 text-gray-800 hover:text-gray-500 dark:text-white cursor-pointer" />
+						</button>
+					)}
 				</div>
 				{/* team */}
 				<div className="flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-700">
@@ -40,12 +54,43 @@ const SideBar = () => {
 				</div>
 				{/* navbar links */}
 				<nav className="z-10 w-full">
-					<SideBarLink 
-					icon={Home}
-					label="Home"
-					href="/"
-					/>
+					<SideBarLink icon={Home} label="Home" href="/" />
+					<SideBarLink icon={Briefcase} label="Timeline" href="/timeline" />
+					<SideBarLink icon={Search} label="Search" href="/search" />
+					<SideBarLink icon={Settings} label="Settings" href="/settings" />
+					<SideBarLink icon={User} label="Users" href="/users" />
+					<SideBarLink icon={Users} label="Team" href="/team" />
 				</nav>
+
+				{/* projects links*/}
+				<button onClick={() => setShowProjects((prev) => !prev)}
+					className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
+				>
+					<span className="">Projects</span>
+					{showProjects ? (
+						<ChevronUp className="h-5 w-5" />
+					) : <ChevronDown className="h-5 w-5" />}
+				</button>
+				{/* projects list*/}
+
+				{/* priority list */}
+				<button onClick={() => setShowPriority((prev) => !prev)}
+					className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
+				>
+					<span className="">Priority</span>
+					{showPriority ? (
+						<ChevronUp className="h-5 w-5" />
+					) : <ChevronDown className="h-5 w-5" />}
+				</button>
+				{showPriority && (
+					<>
+					<SideBarLink icon={AlertCircle} label="Urgent" href="/priority/urgent" />
+					<SideBarLink icon={ShieldAlert} label="High" href="/priority/high" />
+					<SideBarLink icon={AlertTriangle} label="Medium" href="/priority/medium" />
+					<SideBarLink icon={AlertOctagon} label="Low" href="/priority/low" />
+					<SideBarLink icon={Layers3} label="Backlog" href="/priority/backlog" />
+					</>
+				)}
 			</div>
 		</div>
 	);
@@ -55,33 +100,21 @@ interface SideBarLinkProps {
 	href: string;
 	icon: LucideIcon;
 	label: string;
-	// isCollapsed: boolean;
 }
 
 const SideBarLink = ({
 	href,
 	icon: Icon,
 	label,
-	// isCollapsed
 }: SideBarLinkProps) => {
 	const pathname = usePathname();
 	const isActive = pathname === href || (pathname === "/" && href === "/dashboard");
-	const screenWidth = window.innerWidth;
-
-
-	const dispatch = useAppDispatch();
-	const isSideBarCollapsed = useAppSelector(
-		(state) => state.global.isSidebarCollapsed
-	);
-	const isDarkMode = useAppSelector(
-		(state) => state.global.isDarkMode
-	);
 
 	return (
 		<Link href={href} className="w-full">
 			<div className={`relative flex cursor-pointer items-center gap-3 transition-colors hover:bg-gray-100 dark:bg-black dark:hover:bg-gray-700 
 					${isActive ? 'bg-gray-100 text-white dark:bg-gray-600' : ""
-				}`}
+				} justify-start px-8 py-3`}
 			>
 				{isActive && (
 					<div className="absolute left-0 top-0 h-[100%] w-[5px] bg-blue-200" />

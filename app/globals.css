@@ -60,6 +60,6 @@ body,
 	width: 100%;
 	@apply text-sm;
 	@apply bg-white dark:bg-dark-bg;
-	@apply text-gray-900 dark:text-white;
+	@apply text-black dark:text-white;
 }
 
