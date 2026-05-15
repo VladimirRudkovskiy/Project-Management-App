@@ -13,13 +13,11 @@ export const dataGridSxStyles = (isDarkMode: boolean) => ({
 	},
 
 	"& .MuiDataGrid-columnHeaders": {
-		backgroundColor: isDarkMode ? "#1d1f21" : "#ffffff",
-		color: isDarkMode ? "#e5e7eb" : "#111827",
-		borderBottom: `1px solid ${isDarkMode ? "#2d3135" : "#e5e7eb"}`,
-	},
-
-	"& .MuiDataGrid-columnHeader": {
-		backgroundColor: isDarkMode ? "#1d1f21" : "#ffffff",
+		color: `${isDarkMode ? "#e5e7eb" : ""}`,
+		'& [role="row"] > *': {
+			backgroundColor: `${isDarkMode ? "#1d1f21" : "white"}`,
+			borderColor: `${isDarkMode ? "#2d3135" : ""}`,
+		},
 	},
 
 	"& .MuiDataGrid-cell": {
