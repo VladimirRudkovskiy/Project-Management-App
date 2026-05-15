@@ -61,7 +61,7 @@ const SideBar = () => {
 					<SideBarLink icon={Search} label="Search" href="/search" />
 					<SideBarLink icon={Settings} label="Settings" href="/settings" />
 					<SideBarLink icon={User} label="Users" href="/users" />
-					<SideBarLink icon={Users} label="Team" href="/team" />
+					<SideBarLink icon={Users} label="Teams" href="/teams" />
 				</nav>
 
 				{/* projects links*/}
